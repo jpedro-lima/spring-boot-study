@@ -1,0 +1,44 @@
+
+volumes:
+  v-mysql:
+
+networks:
+  spring-network:
+    name: spring-network
+
+services:
+  mysqldb:
+    container_name: "spring_db"
+    image: spring/mysqldb:study
+    build: ./mysql
+    env_file:
+      - .env
+    environment:
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    ports:
+      - "3306:3306"
+    networks:
+      - spring-network
+    volumes:
+      - ./mysql/data:/var/lib/mysql
+
+  spring:
+    container_name: "spring_app"
+    image: spring/app:study
+    build: ./app
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    environment:
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    depends_on:
+      - mysqldb
+    networks:
+      - spring-network
+    volumes:
+      - ./app:/app
