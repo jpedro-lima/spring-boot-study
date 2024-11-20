@@ -2,7 +2,7 @@ package com.studyspring.repositorys;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.studyspring.models.Person;
+import com.studyspring.valueObjects.PersonVO;
 
-public interface PersonRepository extends JpaRepository<Person, Long> {
+public interface PersonRepository extends JpaRepository<PersonVO, Long> {
 }

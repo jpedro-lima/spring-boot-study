@@ -1,5 +1,6 @@
 
 all: build up
+	@sudo docker compose exec spring mvn spring-boot:run
 
 build:
 	@sudo docker compose build
@@ -13,14 +14,20 @@ upd:
 down:
 	@sudo docker compose down
 
+test:
+	@sudo docker compose exec spring mvn test
+
 clean: down
-	@sudo docker volume prune -f
-	@sudo docker system prune -a -f
 
 fclean: clean
+	@sudo docker volume prune -f
+	@sudo docker system prune -a -f
 	@sudo rm -fr ./mysql/data
 	@sudo rm -fr ./app/study-spring-boot/target
 
 re: fclean all
 
-.PHONY: all build up upd down clean fclean re
+restart:
+	@sudo docker compose restart spring
+
+.PHONY: all build up upd down test clean fclean re restart
