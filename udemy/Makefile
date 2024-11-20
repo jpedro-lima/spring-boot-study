@@ -13,6 +13,9 @@ upd:
 down:
 	@sudo docker compose down
 
+test:
+	@docker compose exec spring ./mvnw test
+
 clean: down
 	@sudo docker volume prune -f
 	@sudo docker system prune -a -f

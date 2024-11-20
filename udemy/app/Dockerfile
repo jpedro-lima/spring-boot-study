@@ -6,4 +6,6 @@ WORKDIR /app/study-spring-boot
 
 COPY ./study-spring-boot .
 
-ENTRYPOINT ["./mvnw", "spring-boot:run", "-X"]
+RUN ./mvnw clean install -DskipTests
+
+ENTRYPOINT ["./mvnw", "spring-boot:run"]
