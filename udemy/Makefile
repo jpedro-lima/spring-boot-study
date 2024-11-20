@@ -14,18 +14,12 @@ down:
 	@sudo docker compose down
 
 clean: down
+	@sudo docker volume prune -f
+	@sudo docker system prune -a -f
 
 fclean: clean
-	@sudo rm -rf ./mysql/data
-	@sudo docker system prune -a -f
-	@sudo docker volume prune -f
-	
-	if [ "$(shell docker image ls -a | grep spring/app)" ]; then \
-		docker rmi spring/app:study; \
-	fi
-	if [ "$(shell docker image ls -a | grep spring/mysqldb)" ]; then \
-		docker rmi spring/mysqldb:study; \
-	fi
+	@sudo rm -fr ./mysql/data
+	@sudo rm -fr ./app/study-spring-boot/target
 
 re: fclean all
 
