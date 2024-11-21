@@ -15,15 +15,25 @@ down:
 	@sudo docker compose down
 
 test:
-	@sudo docker compose exec spring mvn test
+	@sudo docker compose exec spring ./mvnw test
 
 clean: down
 
 fclean: clean
 	@sudo docker volume prune -f
-	@sudo docker system prune -a -f
 	@sudo rm -fr ./mysql/data
 	@sudo rm -fr ./app/study-spring-boot/target
+
+	@if [ "$(shell docker image ls -a | grep spring/app)" ]; then \
+		docker rmi spring/app:study; \
+	fi
+
+	@if [ "$(shell docker image ls -a | grep spring/mysqldb)" ]; then \
+		docker rmi spring/mysqldb:study; \
+	fi
+	
+	@docker image prune -f
+	@docker container prune -f
 
 re: fclean all
 

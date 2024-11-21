@@ -43,4 +43,13 @@ public class Person implements Serializable {
 
     public String	getGender() { return gender; }
     public void		setGender(String gender) { this.gender = gender; }
+
+	public void printAttributes() {
+		System.out.println("Print Person");
+		System.out.println("ID: " + id);
+		System.out.println("First Name: " + firstName);
+		System.out.println("Last Name: " + lastName);
+		System.out.println("Address: " + address);
+		System.out.println("Gender: " + gender);
+	}
 }

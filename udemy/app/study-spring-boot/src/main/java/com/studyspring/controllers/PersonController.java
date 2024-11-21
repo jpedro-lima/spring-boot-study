@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.studyspring.services.PersonServices;
-import com.studyspring.valueObjects.PersonVO;
+import com.studyspring.vo.PersonVO;
 
 @RestController
 @RequestMapping("/person")

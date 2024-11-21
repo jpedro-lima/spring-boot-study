@@ -29,7 +29,7 @@ services:
     image: spring/app:study
     build: ./app
     ports:
-      - "8000:8000"
+      - "0.0.0.0:8000:8000"
     env_file: ".env"
     environment:
       - MYSQL_DATABASE=${MYSQL_DATABASE}
