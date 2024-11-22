@@ -40,10 +40,7 @@ public class PersonServices {
 		logger.info("Creating one person!");
 
 		var entity = personMapper.voToPerson(personVO);
-		entity.printAttributes();
-		var ov = personMapper.personToVO(personRepository.save(entity));
-		ov.printAttributes();
-		return ov;
+		return personMapper.personToVO(personRepository.save(entity));
 	}
 	
 	public PersonVO update(PersonVO personVO) {
