@@ -1,74 +1,66 @@
 package com.studyspring.services;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.studyspring.exceptions.ResourceNotFoundException;
-import com.studyspring.models.Person;
+import com.studyspring.mapper.PersonMapper;
 import com.studyspring.repositorys.PersonRepository;
+import com.studyspring.vo.PersonVO;
 
 @Service
 public class PersonServices {
-	
-	private final AtomicLong counter = new AtomicLong();
 	private static final Logger logger = Logger.getLogger(PersonServices.class.getName());
 
 	@Autowired
 	PersonRepository personRepository;
 
-	public List<Person> findAll() {
+	PersonMapper personMapper = PersonMapper.INSTANCE;
+
+	public List<PersonVO> findAll() {
 		logger.info("Finding all persons!");
 
-		return personRepository.findAll();
+		return personMapper.personListToVOList(personRepository.findAll());
 	}
 
-	public Person findById(Long id) {
+	public PersonVO findById(Long id) {
 		if (id == null)
 			throw new ResourceNotFoundException("No records found for this ID");
 		logger.info("Finding one person!");
-		
-		Person person = new Person();
-		person.setId(counter.incrementAndGet());
-		person.setFirstName("Leandro");
-		person.setLastName("Costa");
-		person.setAddress("Uberlândia - Minas Gerais - Brasil");
-		person.setGender("Male");
 
-		return personRepository.findById(id)
+		var entity = personRepository.findById(id)
 			.orElseThrow(() -> new ResourceNotFoundException("No records found for this ID"));
+		return personMapper.personToVO(entity);
 	}
 	
-	public Person create(Person person) {
+	public PersonVO create(PersonVO personVO) {
 		logger.info("Creating one person!");
-		return personRepository.save(person);
+
+		var entity = personMapper.voToPerson(personVO);
+		return personMapper.personToVO(personRepository.save(entity));
 	}
 	
-	public Person update(Person person) {
-		if (person.getId() == null)
-			throw new ResourceNotFoundException("No records found for this ID");
-
+	public PersonVO update(PersonVO personVO) {
 		logger.info("Updating one person!");
 
-		Person entity = personRepository.findById(person.getId())
+		var entity = personRepository.findById(personVO.getId())
 			.orElseThrow(() -> new ResourceNotFoundException("No records found for this ID"));
+		
+		entity.setFirstName(personVO.getFirstName());
+		entity.setLastName(personVO.getLastName());
+		entity.setAddress(personVO.getAddress());
+		entity.setGender(personVO.getGender());
 
-		entity.setFirstName(person.getFirstName());
-		entity.setLastName(person.getLastName());
-		entity.setAddress(person.getAddress());
-		entity.setGender(person.getGender());
-		return personRepository.save(entity);
+		return personMapper.personToVO(personRepository.save(entity));
 	}
 	
 	public void delete(Long id) {
-		if (id == null)
-			throw new ResourceNotFoundException("No records found for this ID");
 		logger.info("Deleting one person!");
 
-		Person entity = personRepository.findById(id)
+		var entity = personRepository.findById(id)
 			.orElseThrow(() -> new ResourceNotFoundException("No records found for this ID"));
 		personRepository.delete(entity);
 	}

@@ -1,0 +1,9 @@
+#VS Code
+.vscode/
+
+# MySQL
+udemy/mysql/data
+
+# App
+udemy/app/study-spring-boot/target
+udemy/app/data

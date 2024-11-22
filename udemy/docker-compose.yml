@@ -1,6 +1,17 @@
 
 volumes:
   v-mysql:
+    driver: local
+    driver_opts:
+      type: "none"
+      device: "./mysql/data"
+      o: "bind"
+  v-app:
+    driver: local
+    driver_opts:
+      type: "none"
+      device: "./app/data"
+      o: "bind"
 
 networks:
   spring-network:
@@ -18,18 +29,18 @@ services:
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
       - MYSQL_RANDOM_ROOT_PASSWORD=yes
     ports:
-      - "3306:3306"
+      - "0.0.0.0:3306:3306"
     networks:
       - spring-network
     volumes:
-      - ./mysql/data:/var/lib/mysql
+      - v-mysql:/var/lib/mysql
 
   spring:
     container_name: "spring_app"
     image: spring/app:study
     build: ./app
     ports:
-      - "8000:8000"
+      - "0.0.0.0:8000:8000"
     env_file: ".env"
     environment:
       - MYSQL_DATABASE=${MYSQL_DATABASE}
@@ -40,4 +51,4 @@ services:
     networks:
       - spring-network
     volumes:
-      - ./app:/app
+      - v-app:/app

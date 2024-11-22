@@ -1,33 +1,18 @@
-package com.studyspring.models;
+package com.studyspring.vo;
 
 import java.io.Serializable;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-
-@Entity
-@Table(name = "person")
-public class Person implements Serializable {
+public class PersonVO implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long	id;
 
-	@Column(name = "first_name", nullable = false, length = 80)
 	private String	firstName;
-	@Column(name = "last_name", nullable = false, length = 80)
 	private String	lastName;
-	@Column(nullable = false, length = 80)
 	private String	address;
-	@Column(nullable = false, length = 6)
 	private String	gender;
 
-	public Person() {}
+	public PersonVO() {}
 	
 	public Long	getId() { return id; }
     public void	setId(Long id) { this.id = id; }
@@ -44,8 +29,8 @@ public class Person implements Serializable {
     public String	getGender() { return gender; }
     public void		setGender(String gender) { this.gender = gender; }
 
-	public void printAttributes() {
-		System.out.println("Print Person");
+    public void printAttributes() {
+        System.out.println("Print PersonVO");
 		System.out.println("ID: " + id);
 		System.out.println("First Name: " + firstName);
 		System.out.println("Last Name: " + lastName);

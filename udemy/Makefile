@@ -1,5 +1,10 @@
 
-all: build up
+all: config build up
+	@sudo docker compose exec spring mvn spring-boot:run
+
+config:
+	@mkdir -p ./mysql/data ./app/data
+	@sudo chmod +666 ./mysql/data ./app/data
 
 build:
 	@sudo docker compose build
@@ -14,16 +19,29 @@ down:
 	@sudo docker compose down
 
 test:
-	@docker compose exec spring ./mvnw test
+	@sudo docker compose exec spring ./mvnw test
 
 clean: down
-	@sudo docker volume prune -f
-	@sudo docker system prune -a -f
+	@if [ "$(shell docker image ls -a | grep spring/app)" ]; then \
+		docker rmi spring/app:study; \
+	fi
+
+	@if [ "$(shell docker image ls -a | grep spring/mysqldb)" ]; then \
+		docker rmi spring/mysqldb:study; \
+	fi
 
 fclean: clean
-	@sudo rm -fr ./mysql/data
+	@sudo rm -fr ./mysql/data ./app/data
 	@sudo rm -fr ./app/study-spring-boot/target
+	
+	@sudo docker image prune -f
+	@sudo docker container prune -f
+	@sudo docker volume prune -f
+	@sudo docker system prune -f
 
 re: fclean all
 
-.PHONY: all build up upd down clean fclean re
+restart:
+	@sudo docker compose restart spring
+
+.PHONY: all config build up upd down test clean fclean re restart
