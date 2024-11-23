@@ -1,5 +1,5 @@
 
-all: config build up
+all: config build upd
 	@sudo docker compose exec spring mvn spring-boot:run
 
 config:

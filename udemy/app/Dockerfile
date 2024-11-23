@@ -1,5 +1,5 @@
 # Etapa 1: Build
-FROM maven:3.8.6 AS build
+FROM maven:3.9.9 AS build
 
 WORKDIR /app/study-spring-boot
 
@@ -18,4 +18,11 @@ WORKDIR /app
 
 COPY --from=build /app/study-spring-boot/target/study-spring-boot-0.0.1-SNAPSHOT.jar /spring-boot-study.jar
 
-ENTRYPOINT ["java", "-jar", "/spring-boot-study.jar"]
+COPY ./startup.sh ./
+
+RUN	apt update 					\
+	&& apt install netcat -y	\
+	&& apt clean				\
+	&& chmod +x startup.sh
+
+ENTRYPOINT ["/bin/sh", "-c", "./startup.sh"]
