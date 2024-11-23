@@ -1,6 +1,5 @@
 
 all: config build upd
-	@sudo docker compose exec spring mvn spring-boot:run
 
 config:
 	@mkdir -p ./mysql/data ./app/data
@@ -40,6 +39,13 @@ fclean: clean
 	@sudo docker system prune -f
 
 re: fclean all
+
+reapp:
+	@docker compose down spring
+	@if [ "$(shell docker image ls -a | grep spring/app)" ]; then \
+		docker rmi spring/app:study; \
+	fi
+	@sudo docker compose up -d --build spring
 
 restart:
 	@sudo docker compose restart spring
