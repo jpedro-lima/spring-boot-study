@@ -17,7 +17,7 @@ upd:
 down:
 	@sudo docker compose down
 
-test:
+tests:
 	@sudo docker compose exec spring ./mvnw test
 
 clean: down
@@ -45,9 +45,10 @@ reapp:
 	@if [ "$(shell docker image ls -a | grep spring/app)" ]; then \
 		docker rmi spring/app:study; \
 	fi
-	@sudo docker compose up -d --build spring
+	@sudo rm -fr ./app/data
+	@make -s
 
 restart:
 	@sudo docker compose restart spring
 
-.PHONY: all config build up upd down test clean fclean re restart
+.PHONY: all config build up upd down tests clean fclean re restart

@@ -9,6 +9,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import org.springframework.stereotype.Service;
 
 import com.studyspring.controllers.PersonController;
+import com.studyspring.exceptions.RequiredObjectIsNullException;
 import com.studyspring.exceptions.ResourceNotFoundException;
 import com.studyspring.mapper.PersonMapper;
 import com.studyspring.repositorys.PersonRepository;
@@ -47,6 +48,8 @@ public class PersonServices {
 	
 	public PersonVO create(PersonVO person) {
 		logger.info("Creating one person!");
+		if (person == null)
+			throw new RequiredObjectIsNullException();
 
 		var entity = personMapper.voToPerson(person); 
 
@@ -58,6 +61,8 @@ public class PersonServices {
 	
 	public PersonVO update(PersonVO person) {
 		logger.info("Updating one person!");
+		if (person == null)
+			throw new RequiredObjectIsNullException();
 
 		var entity = personRepository.findById(person.getKey())
 			.orElseThrow(() -> new ResourceNotFoundException("No records found for this ID"));

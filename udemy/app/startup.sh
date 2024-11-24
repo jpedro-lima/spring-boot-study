@@ -3,7 +3,7 @@
 echo "[======== PINGING DATABASE CONTAINER ========]"
 
 start_time=$(date +%s)
-end_time=$((start_time + 30))
+end_time=$((start_time + 35))
 
 while [ $(date +%s) -lt $end_time ]; do
 
@@ -19,5 +19,5 @@ done
 if [ $(date +%s) -ge $end_time ]; then 
 	echo "[======== DATABASE IS NOT RESPONDING ========]"
 else
-	java -jar /spring-boot-study.jar
+	java -jar /app/app.jar
 fi
