@@ -1,7 +1,7 @@
 package com.studyspring.study_spring_boot.unittests;
 
 public class MockPerson {
-	private Long id;
+	private Long key;
 	private String firstName;
 	private String lastName;
 	private String address;
@@ -9,8 +9,8 @@ public class MockPerson {
 
 	public MockPerson() {}
 
-	public Long getId() { return id; }
-	public void setId(Long id) { this.id = id; }
+	public Long getKey() { return key; }
+	public void setKey(Long key) { this.key = key; }
 
 	public String getFirstName() { return firstName; }
 	public void setFirstName(String firstName) { this.firstName = firstName; }
@@ -26,7 +26,7 @@ public class MockPerson {
 
 	public void printAttributes() {
 		System.out.println("Print MockPerson");
-		System.out.println("ID: " + id);
+		System.out.println("ID: " + key);
 		System.out.println("First Name: " + firstName);
 		System.out.println("Last Name: " + lastName);
 		System.out.println("Address: " + address);

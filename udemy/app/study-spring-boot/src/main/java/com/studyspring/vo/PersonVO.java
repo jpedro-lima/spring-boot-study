@@ -2,10 +2,17 @@ package com.studyspring.vo;
 
 import java.io.Serializable;
 
-public class PersonVO implements Serializable {
+import org.springframework.hateoas.RepresentationModel;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
+@JsonPropertyOrder({"id", "firstName", "lastName", "address", "gender"})
+public class PersonVO extends RepresentationModel<PersonVO> implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private Long	id;
+	@JsonProperty("id")
+	private Long	key;
 
 	private String	firstName;
 	private String	lastName;
@@ -14,8 +21,8 @@ public class PersonVO implements Serializable {
 
 	public PersonVO() {}
 	
-	public Long	getId() { return id; }
-    public void	setId(Long id) { this.id = id; }
+	public Long	getKey() { return key; }
+    public void	setKey(Long key) { this.key = key; }
 
     public String	getFirstName() { return firstName; }
     public void 	setFirstName(String firstName) { this.firstName = firstName; }
@@ -31,7 +38,7 @@ public class PersonVO implements Serializable {
 
     public void printAttributes() {
         System.out.println("Print PersonVO");
-		System.out.println("ID: " + id);
+		System.out.println("ID: " + key);
 		System.out.println("First Name: " + firstName);
 		System.out.println("Last Name: " + lastName);
 		System.out.println("Address: " + address);

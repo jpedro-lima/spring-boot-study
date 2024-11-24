@@ -4,8 +4,11 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import org.springframework.stereotype.Service;
 
+import com.studyspring.controllers.PersonController;
 import com.studyspring.exceptions.ResourceNotFoundException;
 import com.studyspring.mapper.PersonMapper;
 import com.studyspring.repositorys.PersonRepository;
@@ -18,43 +21,56 @@ public class PersonServices {
 	@Autowired
 	PersonRepository personRepository;
 
-	PersonMapper personMapper = PersonMapper.INSTANCE;
+	private final PersonMapper personMapper = PersonMapper.INSTANCE;
 
 	public List<PersonVO> findAll() {
 		logger.info("Finding all persons!");
 
-		return personMapper.personListToVOList(personRepository.findAll());
+		var personsList = personMapper.personListToVOList(personRepository.findAll());
+
+		for (var person : personsList)
+			person.add(linkTo(methodOn(PersonController.class).findById(person.getKey())).withSelfRel());
+
+		return personsList;
 	}
 
 	public PersonVO findById(Long id) {
-		if (id == null)
-			throw new ResourceNotFoundException("No records found for this ID");
 		logger.info("Finding one person!");
 
 		var entity = personRepository.findById(id)
 			.orElseThrow(() -> new ResourceNotFoundException("No records found for this ID"));
-		return personMapper.personToVO(entity);
+
+		var personVO = personMapper.personToVO(entity);
+		personVO.add(linkTo(methodOn(PersonController.class).findById(id)).withSelfRel());
+		return personVO;
 	}
 	
-	public PersonVO create(PersonVO personVO) {
+	public PersonVO create(PersonVO person) {
 		logger.info("Creating one person!");
 
-		var entity = personMapper.voToPerson(personVO);
-		return personMapper.personToVO(personRepository.save(entity));
+		var entity = personMapper.voToPerson(person); 
+
+		var personVO = personMapper.personToVO(personRepository.save(entity));
+		personVO.add(linkTo(methodOn(PersonController.class).findById(person.getKey())).withSelfRel());
+
+		return personVO;
 	}
 	
-	public PersonVO update(PersonVO personVO) {
+	public PersonVO update(PersonVO person) {
 		logger.info("Updating one person!");
 
-		var entity = personRepository.findById(personVO.getId())
+		var entity = personRepository.findById(person.getKey())
 			.orElseThrow(() -> new ResourceNotFoundException("No records found for this ID"));
 		
-		entity.setFirstName(personVO.getFirstName());
-		entity.setLastName(personVO.getLastName());
-		entity.setAddress(personVO.getAddress());
-		entity.setGender(personVO.getGender());
+		entity.setFirstName(person.getFirstName());
+		entity.setLastName(person.getLastName());
+		entity.setAddress(person.getAddress());
+		entity.setGender(person.getGender());
 
-		return personMapper.personToVO(personRepository.save(entity));
+		var personVO = personMapper.personToVO(personRepository.save(entity));
+		personVO.add(linkTo(methodOn(PersonController.class).findById(person.getKey())).withSelfRel());
+		
+		return personVO;
 	}
 	
 	public void delete(Long id) {

@@ -30,7 +30,8 @@ public class PersonController {
 		return service.findAll();
 	}
 
-	@GetMapping(value = "/{id}",
+	@GetMapping(
+			value = "/{id}",
 			produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
 		public PersonVO findById(@PathVariable Long id) {
 		return service.findById(id);
