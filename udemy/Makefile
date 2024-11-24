@@ -1,5 +1,5 @@
 
-all: config build upd
+all: config build up
 
 config:
 	@mkdir -p ./mysql/data ./app/data
